@@ -18,6 +18,7 @@ function getShoppingCart(ids, productsList) {
 		return ids.includes(product.id);
 	});
 	let comboPromotion = getComboPromotion(Array.from(new Set(products.map(product => product.category))));
+	let regularPrice = products.reduce((acc, product) => acc + product.regularPrice, 0);
 	let totalPrice = 0;
 	products.forEach((product) => {
 		let promotion = product.promotions.filter((promotion) =>
@@ -36,9 +37,9 @@ function getShoppingCart(ids, productsList) {
 			return { name: product.name, category: product.category };
 		}),
 		promotion: comboPromotion,
-		totalPrice: `${totalPrice}`,
-		discountValue: '',
-		discount: '',
+		totalPrice: `${totalPrice.toFixed(2)}`,
+		discountValue: `${(regularPrice - totalPrice).toFixed(2)}`,
+		discount: `${((1 - totalPrice / regularPrice) * 100).toFixed(2)}%`,
 	};
 }
 
