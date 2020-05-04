@@ -13,21 +13,23 @@ function getComboPromotion(looks) {
 	return 'FULL LOOK';
 }
 
+function getComboPromotionPrice(product, comboPromotion) {
+	let promotion = product.promotions.filter((promotion) =>
+		promotion.looks.includes(comboPromotion)
+	);
+	if (promotion.length === 0) {
+		return product.regularPrice;
+	}
+	return promotion[0].price;
+}
+
 function getShoppingCart(ids, productsList) {
 	const products = productsList.filter((product) => {
 		return ids.includes(product.id);
 	});
 	let comboPromotion = getComboPromotion(Array.from(new Set(products.map(product => product.category))));
 	let regularPrice = products.reduce((acc, product) => acc + product.regularPrice, 0);
-	let totalPrice = products.reduce((acc, product) => {
-		let promotion = product.promotions.filter((promotion) =>
-			promotion.looks.includes(comboPromotion)
-		);
-		if (promotion.length === 0) {
-			return acc + product.regularPrice;
-		}
-		return acc + promotion[0].price;
-	}, 0);
+	let totalPrice = products.reduce((acc, product) => acc + getComboPromotionPrice(product, comboPromotion), 0);
 
 	return {
 		products: products.map((product) => {
