@@ -19,18 +19,15 @@ function getShoppingCart(ids, productsList) {
 	});
 	let comboPromotion = getComboPromotion(Array.from(new Set(products.map(product => product.category))));
 	let regularPrice = products.reduce((acc, product) => acc + product.regularPrice, 0);
-	let totalPrice = 0;
-	products.forEach((product) => {
+	let totalPrice = products.reduce((acc, product) => {
 		let promotion = product.promotions.filter((promotion) =>
 			promotion.looks.includes(comboPromotion)
 		);
-
 		if (promotion.length === 0) {
-			totalPrice += product.regularPrice;
-		} else {
-			totalPrice += promotion[0].price;
+			return acc + product.regularPrice;
 		}
-	});
+		return acc + promotion[0].price;
+	}, 0);
 
 	return {
 		products: products.map((product) => {
