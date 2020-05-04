@@ -11,9 +11,7 @@ function getComboPromotionPrice(product, comboPromotion) {
 }
 
 function getShoppingCart(ids, productsList) {
-	const products = productsList.filter((product) => {
-		return ids.includes(product.id);
-	});
+	const products = productsList.filter((product) => ids.includes(product.id));
 	let comboPromotion =
 		promotions[
 			Array.from(new Set(products.map((product) => product.category))).length - 1
