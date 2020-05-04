@@ -17,14 +17,26 @@ function getShoppingCart(ids, productsList) {
 	const products = productsList.filter((product) => {
 		return ids.includes(product.id);
 	});
-	let promotion = getComboPromotion(Array.from(new Set(products.map(product => product.category))));
+	let comboPromotion = getComboPromotion(Array.from(new Set(products.map(product => product.category))));
+	let totalPrice = 0;
+	products.forEach((product) => {
+		let promotion = product.promotions.filter((promotion) =>
+			promotion.looks.includes(comboPromotion)
+		);
+
+		if (promotion.length === 0) {
+			totalPrice += product.regularPrice;
+		} else {
+			totalPrice += promotion[0].price;
+		}
+	});
 
 	return {
 		products: products.map((product) => {
 			return { name: product.name, category: product.category };
 		}),
-		promotion: promotion,
-		totalPrice: '',
+		promotion: comboPromotion,
+		totalPrice: `${totalPrice}`,
 		discountValue: '',
 		discount: '',
 	};
