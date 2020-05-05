@@ -23,8 +23,8 @@ function getShoppingCart(ids, productsList) {
 	return {
 		products: products.map(product => createCartItem(product)),
 		promotion: comboPromotion,
-		totalPrice: `${totalPrice.toFixed(2)}`,
-		discountValue: `${(regularPrice - totalPrice).toFixed(2)}`,
+		totalPrice: totalPrice.toFixed(2),
+		discountValue: (regularPrice - totalPrice).toFixed(2),
 		discount: `${((1 - totalPrice / regularPrice) * 100).toFixed(2)}%`,
 	};
 }
