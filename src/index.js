@@ -10,12 +10,12 @@ function getComboPromotionPrice(product, comboPromotion) {
 	return promotion[0].price;
 }
 
+const getCategories = products => [...new Set(products.map(product => product.category))];
+const getComboPromotion = categories => promotions[categories.length - 1];
+
 function getShoppingCart(ids, productsList) {
 	const products = productsList.filter((product) => ids.includes(product.id));
-	let comboPromotion =
-		promotions[
-			Array.from(new Set(products.map((product) => product.category))).length - 1
-		];
+	let comboPromotion = getComboPromotion(getCategories(products));
 	let regularPrice = products.reduce((acc, product) => acc + product.regularPrice, 0);
 	let totalPrice = products.reduce((acc, product) => acc + getComboPromotionPrice(product, comboPromotion), 0);
 
